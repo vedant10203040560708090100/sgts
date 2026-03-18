@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-wh*r^1hb&l(81$ts%mb7c@^vk4m@&v4bq99ie4z8&%4wf6!h55
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sharma-general-tech-services.onrender.com',
+                '127.0.0.1',
+                 'localhost']
 
 
 # Application definition
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'lawfirm.urls'
