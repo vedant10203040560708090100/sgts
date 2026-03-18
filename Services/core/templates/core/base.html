@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LawFirm App{% endblock %}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f9f9f9;
+            color: #1a1a1a;
+        }
+        
+        nav {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 14px;
+            margin-left: 24px;
+        }
+        
+        nav .logo {
+            font-weight: 600;
+            font-size: 16px;
+            margin-left: 0;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="/" class="logo">YourApp</a>
+        <div>
+            <a href="/">Home</a>
+            <a href="/login/">Login</a>
+            <a href="/contact/">Contact</a>
+        </div>
+    </nav>
+    {% block content %}{% endblock %}
+</body>
+
+</html>
