@@ -16,4 +16,15 @@ class Customer(models.Model):
     def is_active(self):
         from django.utils import timezone
         return timezone.now() < self.key_expires_at
+class Client(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='clients')
+    name = models.CharField(max_length=200)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    address = models.TextField(blank=True)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
     
