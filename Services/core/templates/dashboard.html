@@ -1,0 +1,9 @@
+{% extends 'core/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 style="font-size: 28px; font-weight: 600; margin-bottom: 8px;">Welcome, {{ customer.firm_name }}</h1>
+    <p style="color: #555; margin-bottom: 32px;">You're logged in and your account is active.</p>
+    <a href="/logout/" style="font-size: 14px; color: #1a1a1a;">Log out</a>
+</div>
+{% endblock %}
