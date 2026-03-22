@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .models import Customer
+from .models import Customer, Client
 
 def home(request):
     return render(request, 'core/home.html')
@@ -34,3 +34,27 @@ def logout_view(request):
 
 def contact(request):
     return render(request, 'core/contact.html')
+def clients(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    customer = Customer.objects.get(id=customer_id)
+    client_list = Client.objects.filter(customer=customer)
+    return render(request, 'core/clients.html', {'clients': client_list})
+
+def add_client(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    if request.method == 'POST':
+        from .models import Client
+        Client.objects.create(
+            customer_id=customer_id,
+            name=request.POST.get('name'),
+            email=request.POST.get('email'),
+            phone=request.POST.get('phone'),
+            address=request.POST.get('address'),
+            notes=request.POST.get('notes'),
+        )
+        return redirect('clients')
+    return render(request, 'core/add_client.html')
