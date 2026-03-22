@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .models import Customer, Client
 from .models import Customer, Client, Invoice, InvoiceItem
+
 def home(request):
     return render(request, 'core/home.html')
 
@@ -34,6 +34,7 @@ def logout_view(request):
 
 def contact(request):
     return render(request, 'core/contact.html')
+
 def clients(request):
     customer_id = request.session.get('customer_id')
     if not customer_id:
@@ -47,7 +48,6 @@ def add_client(request):
     if not customer_id:
         return redirect('login')
     if request.method == 'POST':
-        from .models import Client
         Client.objects.create(
             customer_id=customer_id,
             name=request.POST.get('name'),
@@ -58,6 +58,7 @@ def add_client(request):
         )
         return redirect('clients')
     return render(request, 'core/add_client.html')
+
 def invoices(request):
     customer_id = request.session.get('customer_id')
     if not customer_id:
@@ -86,16 +87,19 @@ def add_invoice(request):
         prices = request.POST.getlist('unit_price')
         total = 0
         for i in range(len(descriptions)):
-            if descriptions[i]:
-                qty = float(quantities[i])
-                price = float(prices[i])
-                InvoiceItem.objects.create(
-                    invoice=invoice,
-                    description=descriptions[i],
-                    quantity=qty,
-                    unit_price=price
-                )
-                total += qty * price
+            if descriptions[i] and quantities[i] and prices[i]:
+                try:
+                    qty = float(quantities[i])
+                    price = float(prices[i])
+                    InvoiceItem.objects.create(
+                        invoice=invoice,
+                        description=descriptions[i],
+                        quantity=qty,
+                        unit_price=price
+                    )
+                    total += qty * price
+                except ValueError:
+                    pass
         invoice.total = total
         invoice.save()
         return redirect('invoices')
