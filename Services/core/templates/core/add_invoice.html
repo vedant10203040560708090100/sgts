@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% block title %}New Invoice{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 640px;">
+    <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 32px;">New Invoice</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <input type="text" name="invoice_number" placeholder="Invoice number e.g. INV-001" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+            <input type="date" name="due_date" required style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+        </div>
+        <select name="client" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 12px;">
+            <option value="">— No client —</option>
+            {% for client in clients %}
+            <option value="{{ client.id }}">{{ client.name }}</option>
+            {% endfor %}
+        </select>
+        <div id="items">
+            <div class="item-row" style="display: grid; grid-template-columns: 3fr 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                <input type="text" name="description" placeholder="Description" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                <input type="number" name="quantity" placeholder="Qty" value="1" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                <input type="number" name="unit_price" placeholder="Price" step="0.01" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+            </div>
+        </div>
+        <button type="button" onclick="addRow()" style="font-size: 13px; color: #555; background: none; border: 1px solid #ddd; padding: 8px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 16px;">+ Add line item</button>
+        <textarea name="notes" placeholder="Notes (optional)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; height: 80px; margin-bottom: 12px;"></textarea>
+        <button type="submit" style="width: 100%; padding: 12px; background: #1a1a1a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">Create Invoice</button>
+    </form>
+</div>
+<script>
+function addRow() {
+    const row = document.createElement('div');
+    row.className = 'item-row';
+    row.style = 'display: grid; grid-template-columns: 3fr 1fr 1fr; gap: 8px; margin-bottom: 8px;';
+    row.innerHTML = `
+        <input type="text" name="description" placeholder="Description" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+        <input type="number" name="quantity" placeholder="Qty" value="1" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+        <input type="number" name="unit_price" placeholder="Price" step="0.01" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+    `;
+    document.getElementById('items').appendChild(row);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% block title %}Invoice #{{ invoice.invoice_number }}{% endblock %}
+{% block content %}
+<div class="container" style="max-width: 640px;">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 40px;">
+        <div>
+            <h1 style="font-size: 28px; font-weight: 600;">Invoice #{{ invoice.invoice_number }}</h1>
+            <p style="color: #888; font-size: 14px;">Due {{ invoice.due_date }}</p>
+        </div>
+        <span style="padding: 6px 14px; border-radius: 20px; font-size: 13px;
+            {% if invoice.status == 'paid' %}background: #e6f4ea; color: #1a7f37;
+            {% elif invoice.status == 'sent' %}background: #fff3cd; color: #856404;
+            {% else %}background: #f0f0f0; color: #555;{% endif %}">
+            {{ invoice.status|capfirst }}
+        </span>
+    </div>
+    {% if invoice.client %}
+    <p style="margin-bottom: 32px; font-size: 14px;"><strong>Client:</strong> {{ invoice.client.name }}</p>
+    {% endif %}
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 24px;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee;">
+                <th style="text-align: left; padding: 10px 0; color: #888;">Description</th>
+                <th style="text-align: right; padding: 10px 0; color: #888;">Qty</th>
+                <th style="text-align: right; padding: 10px 0; color: #888;">Price</th>
+                <th style="text-align: right; padding: 10px 0; color: #888;">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items.all %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 12px 0;">{{ item.description }}</td>
+                <td style="padding: 12px 0; text-align: right;">{{ item.quantity }}</td>
+                <td style="padding: 12px 0; text-align: right;">${{ item.unit_price }}</td>
+                <td style="padding: 12px 0; text-align: right;">${{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align: right; font-size: 18px; font-weight: 600;">Total: ${{ invoice.total }}</div>
+    {% if invoice.notes %}
+    <p style="margin-top: 24px; font-size: 14px; color: #555;">{{ invoice.notes }}</p>
+    {% endif %}
+    <div style="margin-top: 32px;">
+        <a href="/invoices/" style="font-size: 14px; color: #888;">← Back to invoices</a>
+    </div>
+</div>
+{% endblock %}

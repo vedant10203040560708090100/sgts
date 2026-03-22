@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import Customer, Client
-
+from .models import Customer, Client, Invoice, InvoiceItem
 def home(request):
     return render(request, 'core/home.html')
 
@@ -58,3 +58,52 @@ def add_client(request):
         )
         return redirect('clients')
     return render(request, 'core/add_client.html')
+def invoices(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    invoice_list = Invoice.objects.filter(customer_id=customer_id).order_by('-created_at')
+    return render(request, 'core/invoices.html', {'invoices': invoice_list})
+
+def add_invoice(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    customer = Customer.objects.get(id=customer_id)
+    clients = Client.objects.filter(customer=customer)
+    if request.method == 'POST':
+        invoice = Invoice.objects.create(
+            customer_id=customer_id,
+            client_id=request.POST.get('client') or None,
+            invoice_number=request.POST.get('invoice_number'),
+            due_date=request.POST.get('due_date'),
+            notes=request.POST.get('notes'),
+            status='draft',
+            total=0
+        )
+        descriptions = request.POST.getlist('description')
+        quantities = request.POST.getlist('quantity')
+        prices = request.POST.getlist('unit_price')
+        total = 0
+        for i in range(len(descriptions)):
+            if descriptions[i]:
+                qty = float(quantities[i])
+                price = float(prices[i])
+                InvoiceItem.objects.create(
+                    invoice=invoice,
+                    description=descriptions[i],
+                    quantity=qty,
+                    unit_price=price
+                )
+                total += qty * price
+        invoice.total = total
+        invoice.save()
+        return redirect('invoices')
+    return render(request, 'core/add_invoice.html', {'clients': clients})
+
+def view_invoice(request, invoice_id):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    invoice = Invoice.objects.get(id=invoice_id, customer_id=customer_id)
+    return render(request, 'core/view_invoice.html', {'invoice': invoice})

@@ -9,4 +9,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('clients/', views.clients, name='clients'),
     path('clients/add/', views.add_client, name='add_client'),
+    path('invoices/', views.invoices, name='invoices'),
+    path('invoices/add/', views.add_invoice, name='add_invoice'),
+    path('invoices/<int:invoice_id>/', views.view_invoice, name='view_invoice'),
     ]
