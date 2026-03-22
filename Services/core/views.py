@@ -74,7 +74,7 @@ def add_invoice(request):
     clients = Client.objects.filter(customer=customer)
     if request.method == 'POST':
         invoice_number = request.POST.get('invoice_number')
-        if Invoice.objects.filter(invoice_number=invoice_number).exists():
+        if Invoice.objects.filter(invoice_number=invoice_number, customer_id=customer_id).exists():
             return render(request, 'core/add_invoice.html', {
                 'clients': clients,
                 'error': 'An invoice with that number already exists.'
