@@ -85,6 +85,9 @@ def add_invoice(request):
         descriptions = request.POST.getlist('description')
         quantities = request.POST.getlist('quantity')
         prices = request.POST.getlist('unit_price')
+        print("descriptions:", descriptions)
+        print("quantities:", quantities)
+        print("prices:", prices)
         total = 0
         for i in range(len(descriptions)):
             if descriptions[i] and quantities[i] and prices[i]:
