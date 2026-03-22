@@ -7,6 +7,6 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('logout/', views.logout_view, name='logout'),
     path('contact/', views.contact, name='contact'),
-]
-path('clients/', views.clients, name='clients'),
-path('clients/add/', views.add_client, name='add_client'),
+    path('clients/', views.clients, name='clients'),
+    path('clients/add/', views.add_client, name='add_client'),
+    ]
