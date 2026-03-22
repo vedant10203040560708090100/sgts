@@ -12,4 +12,5 @@ urlpatterns = [
     path('invoices/', views.invoices, name='invoices'),
     path('invoices/add/', views.add_invoice, name='add_invoice'),
     path('invoices/<int:invoice_id>/', views.view_invoice, name='view_invoice'),
+    path('appointments/', views.appointments, name='appointments'),
     ]
