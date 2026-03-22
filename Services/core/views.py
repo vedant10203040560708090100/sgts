@@ -90,7 +90,7 @@ def add_invoice(request):
         print("prices:", prices)
         total = 0
         for i in range(len(descriptions)):
-            if descriptions[i] and quantities[i] and prices[i]:
+            if  quantities[i] and prices[i]:
                 try:
                     qty = float(quantities[i])
                     price = float(prices[i])
