@@ -7,18 +7,12 @@ def home(request):
 
 def login_view(request):
     if request.method == 'POST':
-        key = request.POST.get('activation_key').strip()
-        try:
-            customer = Customer.objects.get(activation_key=key)
-            if customer.is_active():
-                request.session['customer_id'] = customer.id
-                request.session['firm_name'] = customer.firm_name
-                return redirect('dashboard')
-            else:
-                error = 'Your activation key has expired. Please contact us to renew.'
-        except Customer.DoesNotExist:
-            error = 'Invalid activation key.'
-        return render(request, 'core/login.html', {'error': error})
+        invoice_number = request.POST.get('invoice_number')
+        if Invoice.objects.filter(invoice_number=invoice_number).exists():
+            return render(request, 'core/add_invoice.html', {
+                'clients': clients,
+                'error': 'An invoice with that number already exists.'
+        })
     return render(request, 'core/login.html')
 
 def dashboard(request):
