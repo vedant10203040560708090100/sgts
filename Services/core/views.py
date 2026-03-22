@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import Customer, Client, Invoice, InvoiceItem
-
+from .models import Customer, Client, Invoice, InvoiceItem, Appointment
 def home(request):
     return render(request, 'core/home.html')
 
@@ -118,3 +118,35 @@ def view_invoice(request, invoice_id):
         return redirect('login')
     invoice = Invoice.objects.get(id=invoice_id, customer_id=customer_id)
     return render(request, 'core/view_invoice.html', {'invoice': invoice})
+def appointments(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    appointment_list = Appointment.objects.filter(customer_id=customer_id).order_by('date', 'time')
+    return render(request, 'core/appointments.html', {'appointments': appointment_list})
+
+def add_appointment(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    customer = Customer.objects.get(id=customer_id)
+    clients = Client.objects.filter(customer=customer)
+    if request.method == 'POST':
+        Appointment.objects.create(
+            customer_id=customer_id,
+            client_id=request.POST.get('client') or None,
+            title=request.POST.get('title'),
+            date=request.POST.get('date'),
+            time=request.POST.get('time'),
+            notes=request.POST.get('notes'),
+            status='scheduled'
+        )
+        return redirect('appointments')
+    return render(request, 'core/add_appointment.html', {'clients': clients})
+
+def view_appointment(request, appointment_id):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    appointment = Appointment.objects.get(id=appointment_id, customer_id=customer_id)
+    return render(request, 'core/view_appointment.html', {'appointment': appointment})
