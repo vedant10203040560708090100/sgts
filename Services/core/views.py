@@ -8,8 +8,9 @@ def home(request):
 def login_view(request):
     if request.method == 'POST':
         key = request.POST.get('activation_key').strip()
+        org = request.POST.get('organization').strip()
         try:
-            customer = Customer.objects.get(activation_key=key)
+            customer = Customer.objects.get(activation_key=key, firm_name=org)
             if customer.is_active():
                 request.session['customer_id'] = customer.id
                 request.session['firm_name'] = customer.firm_name
@@ -17,7 +18,7 @@ def login_view(request):
             else:
                 error = 'Your activation key has expired. Please contact us to renew.'
         except Customer.DoesNotExist:
-            error = 'Invalid activation key.'
+            error = 'Invalid organization name or activation key.'
         return render(request, 'core/login.html', {'error': error})
     return render(request, 'core/login.html')
 
