@@ -13,6 +13,9 @@
                 <th style="text-align: left; padding: 10px 0; color: #888;">Date</th>
                 <th style="text-align: left; padding: 10px 0; color: #888;">Time</th>
                 <th style="text-align: left; padding: 10px 0; color: #888;">Status</th>
+                <td style="padding: 12px 0;">
+                    <a href="/appointments/{{ appointment.id }}/delete/" onclick="return confirm('Delete this appointment?')" style="font-size: 12px; color: #c5221f;">Delete</a>
+                </td>
             </tr>
         </thead>
         <tbody>

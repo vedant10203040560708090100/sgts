@@ -191,3 +191,16 @@ def upload_document(request):
         )
         return redirect('documents')
     return render(request, 'core/upload_document.html', {'clients': clients})
+def delete_client(request, client_id):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    Client.objects.filter(id=client_id, customer_id=customer_id).delete()
+    return redirect('clients')
+
+def delete_appointment(request, appointment_id):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    Appointment.objects.filter(id=appointment_id, customer_id=customer_id).delete()
+    return redirect('appointments')
