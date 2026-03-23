@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LawFirm App{% endblock %}</title>
+    <title>{% block title %}SGTS{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -13,51 +14,234 @@
         }
         
         body {
-            font-family: system-ui, sans-serif;
-            background: #f9f9f9;
-            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            background: #f8fff4;
+            color: #474350;
         }
         
         nav {
-            background: white;
-            border-bottom: 1px solid #eee;
-            padding: 16px 40px;
+            background: #474350;
+            padding: 0 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 56px;
         }
         
-        nav a {
-            text-decoration: none;
-            color: #1a1a1a;
-            font-size: 14px;
-            margin-left: 24px;
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
         }
         
-        nav .logo {
+        .nav-logo {
+            color: #fafac6;
             font-weight: 600;
-            font-size: 16px;
-            margin-left: 0;
+            font-size: 15px;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-links a.active {
+            color: #fecdaa;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-logout {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            text-decoration: none;
+        }
+        
+        .nav-logout:hover {
+            color: white;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
-            padding: 60px 24px;
+            padding: 40px 24px;
+        }
+        
+        .page-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #474350;
+            margin-bottom: 4px;
+        }
+        
+        .page-subtitle {
+            font-size: 14px;
+            color: #7a7380;
+            margin-bottom: 32px;
+        }
+        
+        .card {
+            background: #fcffeb;
+            border-radius: 10px;
+            padding: 24px;
+            border: 0.5px solid #e8efd8;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-primary {
+            background: #474350;
+            color: #fafac6;
+        }
+        
+        .btn-primary:hover {
+            background: #5a5465;
+        }
+        
+        .btn-secondary {
+            background: #fecdaa;
+            color: #474350;
+        }
+        
+        .btn-secondary:hover {
+            background: #fdb98a;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            text-align: left;
+            padding: 10px 0;
+            color: #7a7380;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+            border-bottom: 1px solid #e8efd8;
+        }
+        
+        td {
+            padding: 14px 0;
+            border-bottom: 0.5px solid #eef3e4;
+            color: #474350;
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #dde8cc;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: #fcffeb;
+            color: #474350;
+            margin-bottom: 12px;
+            outline: none;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #474350;
+        }
+        
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background: #e6f4ea;
+            color: #1a7f37;
+        }
+        
+        .badge-warning {
+            background: #fafac6;
+            color: #474350;
+        }
+        
+        .badge-danger {
+            background: #fce8e6;
+            color: #c5221f;
+        }
+        
+        .badge-info {
+            background: #fecdaa;
+            color: #474350;
+        }
+        
+        .error {
+            color: #c5221f;
+            font-size: 13px;
+            margin-bottom: 16px;
+            padding: 10px 14px;
+            background: #fce8e6;
+            border-radius: 8px;
         }
     </style>
 </head>
 
 <body>
+    {% if request.session.customer_id %}
     <nav>
-        <a href="/" class="logo">YourApp</a>
-        <div>
-            <a href="/">Home</a>
-            <a href="/login/">Login</a>
-            <a href="/contact/">Contact</a>
+        <div class="nav-left">
+            <a href="/dashboard/" class="nav-logo">SGTS</a>
+            <div class="nav-links">
+                <a href="/dashboard/" {% if request.resolver_match.url_name=='dashboard' %}class="active" {% endif %}>Dashboard</a>
+                <a href="/clients/" {% if request.resolver_match.url_name=='clients' %}class="active" {% endif %}>Clients</a>
+                <a href="/invoices/" {% if request.resolver_match.url_name=='invoices' %}class="active" {% endif %}>Invoices</a>
+                <a href="/appointments/" {% if request.resolver_match.url_name=='appointments' %}class="active" {% endif %}>Appointments</a>
+                <a href="/documents/" {% if request.resolver_match.url_name=='documents' %}class="active" {% endif %}>Documents</a>
+            </div>
         </div>
+        <a href="/logout/" class="nav-logout">Log out</a>
     </nav>
-    {% block content %}{% endblock %}
+    {% else %}
+    <nav>
+        <div class="nav-left">
+            <a href="/" class="nav-logo">SGTS</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/contact/">Contact</a>
+            </div>
+        </div>
+        <a href="/login/" class="btn btn-secondary" style="font-size: 13px;">Log in</a>
+    </nav>
+    {% endif %} {% block content %}{% endblock %}
 </body>
 
 </html>
