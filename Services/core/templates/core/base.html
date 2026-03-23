@@ -221,11 +221,11 @@
         <div class="nav-left">
             <a href="/dashboard/" class="nav-logo">SGTS</a>
             <div class="nav-links">
-                <a href="/dashboard/" {% if request.resolver_match.url_name=='dashboard' %}class="active" {% endif %}>Dashboard</a>
-                <a href="/clients/" {% if request.resolver_match.url_name=='clients' %}class="active" {% endif %}>Clients</a>
-                <a href="/invoices/" {% if request.resolver_match.url_name=='invoices' %}class="active" {% endif %}>Invoices</a>
-                <a href="/appointments/" {% if request.resolver_match.url_name=='appointments' %}class="active" {% endif %}>Appointments</a>
-                <a href="/documents/" {% if request.resolver_match.url_name=='documents' %}class="active" {% endif %}>Documents</a>
+                <a href="/dashboard/" {% if request.resolver_match.url_name == 'dashboard' %}class="active" {% endif %}>Dashboard</a>
+                <a href="/clients/" {% if request.resolver_match.url_name == 'clients' %}class="active" {% endif %}>Clients</a>
+                <a href="/invoices/" {% if request.resolver_match.url_name == 'invoices' %}class="active" {% endif %}>Invoices</a>
+                <a href="/appointments/" {% if request.resolver_match.url_name == 'appointments' %}class="active" {% endif %}>Appointments</a>
+                <a href="/documents/" {% if request.resolver_match.url_name == 'documents' %}class="active" {% endif %}>Documents</a>
             </div>
         </div>
         <a href="/logout/" class="nav-logout">Log out</a>
