@@ -5,14 +5,13 @@
         <a href="/clients/add/" class="btn btn-primary">+ Add Client</a>
     </div>
     {% if clients %}
-    <td>ID: {{ client.pk }} / {{ client.id }}</td>
     <table>
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <td><a href="{% url 'delete_client' client.id %}" onclick="return confirm('Delete this client?')" style="font-size: 12px; color: #c5221f;">Delete</a></td>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -21,8 +20,7 @@
                 <td style="font-weight: 500;">{{ client.name }}</td>
                 <td>{{ client.email }}</td>
                 <td>{{ client.phone }}</td>
-                <td>
-                    {{client.delete}}
+                <td><a href="/clients/{{ client.id }}/delete/" onclick="return confirm('Delete this client?')" style="font-size: 12px; color: #c5221f;">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
