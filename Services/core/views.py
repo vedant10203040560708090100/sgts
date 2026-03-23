@@ -26,9 +26,18 @@ def dashboard(request):
     customer_id = request.session.get('customer_id')
     if not customer_id:
         return redirect('login')
+    from django.utils import timezone
     customer = Customer.objects.get(id=customer_id)
-    return render(request, 'core/dashboard.html', {'customer': customer})
-
+    context = {
+        'customer': customer,
+        'client_count': Client.objects.filter(customer_id=customer_id).count(),
+        'invoice_count': Invoice.objects.filter(customer_id=customer_id).count(),
+        'appointment_count': Appointment.objects.filter(customer_id=customer_id).count(),
+        'document_count': Document.objects.filter(customer_id=customer_id).count(),
+        'recent_clients': Client.objects.filter(customer_id=customer_id).order_by('-created_at')[:3],
+        'upcoming_appointments': Appointment.objects.filter(customer_id=customer_id, date__gte=timezone.now().date(), status='scheduled').order_by('date')[:3],
+    }
+    return render(request, 'core/dashboard.html', context)
 def logout_view(request):
     request.session.flush()
     return redirect('login')
