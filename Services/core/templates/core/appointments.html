@@ -1,44 +1,40 @@
 {% extends 'core/base.html' %} {% block title %}Appointments{% endblock %} {% block content %}
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-        <h1 style="font-size: 28px; font-weight: 600;">Appointments</h1>
-        <a href="/appointments/add/" style="background: #1a1a1a; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px;">+ New Appointment</a>
+        <h1 class="page-title">Appointments</h1>
+        <a href="/appointments/add/" class="btn btn-primary">+ New Appointment</a>
     </div>
     {% if appointments %}
-    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+    <table>
         <thead>
-            <tr style="border-bottom: 2px solid #eee;">
-                <th style="text-align: left; padding: 10px 0; color: #888;">Title</th>
-                <th style="text-align: left; padding: 10px 0; color: #888;">Client</th>
-                <th style="text-align: left; padding: 10px 0; color: #888;">Date</th>
-                <th style="text-align: left; padding: 10px 0; color: #888;">Time</th>
-                <th style="text-align: left; padding: 10px 0; color: #888;">Status</th>
-                <td style="padding: 12px 0;">
-                    <a href="/appointments/{{ appointment.id }}/delete/" onclick="return confirm('Delete this appointment?')" style="font-size: 12px; color: #c5221f;">Delete</a>
-                </td>
+            <tr>
+                <th>Title</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for appointment in appointments %}
-            <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 12px 0;"><a href="/appointments/{{ appointment.id }}/" style="color: #1a1a1a; font-weight: 500;">{{ appointment.title }}</a></td>
-                <td style="padding: 12px 0; color: #555;">{{ appointment.client.name|default:"—" }}</td>
-                <td style="padding: 12px 0; color: #555;">{{ appointment.date }}</td>
-                <td style="padding: 12px 0; color: #555;">{{ appointment.time }}</td>
-                <td style="padding: 12px 0;">
-                    <span style="padding: 4px 10px; border-radius: 20px; font-size: 12px;
-                        {% if appointment.status == 'completed' %}background: #e6f4ea; color: #1a7f37;
-                        {% elif appointment.status == 'cancelled' %}background: #fce8e6; color: #c5221f;
-                        {% else %}background: #e8f0fe; color: #1a73e8;{% endif %}">
+            <tr>
+                <td style="font-weight: 500;"><a href="/appointments/{{ appointment.id }}/" style="color: #474350;">{{ appointment.title }}</a></td>
+                <td>{{ appointment.client.name|default:"—" }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time }}</td>
+                <td>
+                    <span class="badge {% if appointment.status == 'completed' %}badge-success{% elif appointment.status == 'cancelled' %}badge-danger{% else %}badge-info{% endif %}">
                         {{ appointment.status|capfirst }}
                     </span>
                 </td>
+                <td><a href="/appointments/{{ appointment.id }}/delete/" onclick="return confirm('Delete this appointment?')" style="font-size: 12px; color: #c5221f;">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p style="color: #888;">No appointments yet. Schedule your first one!</p>
+    <p style="color: #7a7380;">No appointments yet. Schedule your first one!</p>
     {% endif %}
 </div>
 {% endblock %}
