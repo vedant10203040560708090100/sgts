@@ -1,30 +1,63 @@
-{% extends 'core/base.html' %} {% block title %}Dashboard{% endblock %} {% block content %}
+{% extends 'core/base.html' %} {% block title %}Dashboard — SGTS{% endblock %} {% block content %}
 <div class="container">
-    <h1 style="font-size: 28px; font-weight: 600; margin-bottom: 8px;">Welcome, {{ customer.firm_name }}</h1>
-    <p style="color: #555; margin-bottom: 32px;">What would you like to do today?</p>
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 500px;">
-        <a href="/clients/" style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 24px; text-decoration: none; color: #1a1a1a;">
-            <div style="font-size: 24px; margin-bottom: 8px;">👥</div>
-            <div style="font-weight: 500;">Clients</div>
-            <div style="font-size: 13px; color: #888;">Manage your clients</div>
-        </a>
-        <a href="/invoices/" style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 24px; text-decoration: none; color: #1a1a1a;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📄</div>
-            <div style="font-weight: 500;">Invoices</div>
-            <div style="font-size: 13px; color: #888;">See who owes you what</div>
-        </a>
-        <a href="/appointments/" style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 24px; text-decoration: none; color: #1a1a1a;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📅</div>
-            <div style="font-weight: 500;">Appointments</div>
-            <div style="font-size: 13px; color: #888;">Coming soon</div>
-        </a>
-        <a href="/documents/" style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 24px; text-decoration: none; color: #1a1a1a;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📁</div>
-            <div style="font-weight: 500;">Documents</div>
-            <div style="font-size: 13px; color: #888;">Coming soon</div>
-        </a>
+    <h1 class="page-title">Welcome back, {{ customer.firm_name }}</h1>
+    <p class="page-subtitle">Here's what's happening with your business today.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px;">
+        <div class="card" style="padding: 20px;">
+            <p style="font-size: 11px; color: #7a7380; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em;">Clients</p>
+            <p style="font-size: 28px; font-weight: 600;">{{ client_count }}</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+            <p style="font-size: 11px; color: #7a7380; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em;">Invoices</p>
+            <p style="font-size: 28px; font-weight: 600;">{{ invoice_count }}</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+            <p style="font-size: 11px; color: #7a7380; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em;">Appointments</p>
+            <p style="font-size: 28px; font-weight: 600;">{{ appointment_count }}</p>
+        </div>
+        <div class="card" style="padding: 20px;">
+            <p style="font-size: 11px; color: #7a7380; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em;">Documents</p>
+            <p style="font-size: 28px; font-weight: 600;">{{ document_count }}</p>
+        </div>
     </div>
-    <br>
-    <a href="/logout/" style="font-size: 14px; color: #888;">Log out</a>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <p style="font-size: 14px; font-weight: 500;">Recent clients</p>
+                <a href="/clients/" style="font-size: 12px; color: #474350; border-bottom: 1px solid #fecdaa; text-decoration: none;">View all</a>
+            </div>
+            {% for client in recent_clients %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 0.5px solid #eef3e4;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #fafac6; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #474350;">{{ client.name|slice:":2"|upper }}</div>
+                    <span style="font-size: 13px;">{{ client.name }}</span>
+                </div>
+                <span style="font-size: 12px; color: #7a7380;">{{ client.created_at|date:"M d" }}</span>
+            </div>
+            {% empty %}
+            <p style="font-size: 13px; color: #7a7380;">No clients yet.</p>
+            {% endfor %}
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <p style="font-size: 14px; font-weight: 500;">Upcoming appointments</p>
+                <a href="/appointments/" style="font-size: 12px; color: #474350; border-bottom: 1px solid #fecdaa; text-decoration: none;">View all</a>
+            </div>
+            {% for appt in upcoming_appointments %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 0.5px solid #eef3e4;">
+                <div>
+                    <p style="font-size: 13px; font-weight: 500;">{{ appt.title }}</p>
+                    <p style="font-size: 12px; color: #7a7380;">{{ appt.client.name|default:"No client" }}</p>
+                </div>
+                <span style="font-size: 12px; background: #fafac6; color: #474350; padding: 3px 10px; border-radius: 4px; font-weight: 500;">{{ appt.date|date:"M d" }}</span>
+            </div>
+            {% empty %}
+            <p style="font-size: 13px; color: #7a7380;">No upcoming appointments.</p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
