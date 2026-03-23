@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, redirect
 from . import views
 
 urlpatterns = [
@@ -17,6 +17,6 @@ urlpatterns = [
     path('appointments/<int:appointment_id>/', views.view_appointment, name='view_appointment'),
     path('documents/', views.documents, name='documents'),
     path('documents/upload/', views.upload_document, name='upload_document'),
+    path('clients/delete/', lambda request: redirect('clients')),
     path('clients/<int:client_id>/delete/', views.delete_client, name='delete_client'),
-path('appointments/<int:appointment_id>/delete/', views.delete_appointment, name='delete_appointment'),
     ]
