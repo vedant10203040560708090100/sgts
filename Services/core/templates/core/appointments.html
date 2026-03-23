@@ -17,10 +17,9 @@
             </tr>
         </thead>
         <tbody>
-            <td>{{ appointment.pk }}</td>
             {% for appointment in appointments %}
             <tr>
-                <td style="font-weight: 500;"><a href="/appointments/{{ appointment.id }}/" style="color: #474350;">{{ appointment.title }}</a></td>
+                <td style="font-weight: 500;"><a href="/appointments/{{ appointment.pk }}/" style="color: #474350;">{{ appointment.title }}</a></td>
                 <td>{{ appointment.client.name|default:"—" }}</td>
                 <td>{{ appointment.date }}</td>
                 <td>{{ appointment.time }}</td>
