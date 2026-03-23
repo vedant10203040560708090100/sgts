@@ -29,7 +29,7 @@
                         {{ appointment.status|capfirst }}
                     </span>
                 </td>
-                <td><a href="/appointments/{{ appointment.id }}/delete/" onclick="return confirm('Delete this appointment?')" style="font-size: 12px; color: #c5221f;">Delete</a></td>
+                <td><a href="/appointments/{{ appointment.pk }}/delete/" onclick="return confirm('Delete this appointment?')" style="font-size: 12px; color: #c5221f;">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
