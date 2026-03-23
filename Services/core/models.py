@@ -74,3 +74,13 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.date}"
+class Document(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='documents')
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True, blank=True, related_name='documents')
+    name = models.CharField(max_length=200)
+    file_url = models.URLField()
+    public_id = models.CharField(max_length=200)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
