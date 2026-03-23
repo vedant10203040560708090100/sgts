@@ -149,4 +149,9 @@ def view_appointment(request, appointment_id):
     if not customer_id:
         return redirect('login')
     appointment = Appointment.objects.get(id=appointment_id, customer_id=customer_id)
+    status = request.GET.get('status')
+    if status in ['completed', 'cancelled']:
+        appointment.status = status
+        appointment.save()
+        return redirect(f'/appointments/{appointment_id}/')
     return render(request, 'core/view_appointment.html', {'appointment': appointment})
