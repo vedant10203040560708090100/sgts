@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import Customer, Client, Invoice, InvoiceItem
-from .models import Customer, Client, Invoice, InvoiceItem, Appointment
+from .models import Customer, Client, Invoice, InvoiceItem, Appointment, Document
 def home(request):
     return render(request, 'core/home.html')
 
@@ -155,3 +155,30 @@ def view_appointment(request, appointment_id):
         appointment.save()
         return redirect(f'/appointments/{appointment_id}/')
     return render(request, 'core/view_appointment.html', {'appointment': appointment})
+import cloudinary.uploader
+
+def documents(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    document_list = Document.objects.filter(customer_id=customer_id).order_by('-uploaded_at')
+    return render(request, 'core/documents.html', {'documents': document_list})
+
+def upload_document(request):
+    customer_id = request.session.get('customer_id')
+    if not customer_id:
+        return redirect('login')
+    customer = Customer.objects.get(id=customer_id)
+    clients = Client.objects.filter(customer=customer)
+    if request.method == 'POST' and request.FILES.get('file'):
+        file = request.FILES['file']
+        result = cloudinary.uploader.upload(file, resource_type='auto')
+        Document.objects.create(
+            customer_id=customer_id,
+            client_id=request.POST.get('client') or None,
+            name=request.POST.get('name') or file.name,
+            file_url=result['secure_url'],
+            public_id=result['public_id']
+        )
+        return redirect('documents')
+    return render(request, 'core/upload_document.html', {'clients': clients})

@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %} {% block title %}Documents{% endblock %} {% block content %}
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+        <h1 style="font-size: 28px; font-weight: 600;">Documents</h1>
+        <a href="/documents/upload/" style="background: #1a1a1a; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px;">+ Upload Document</a>
+    </div>
+    {% if documents %}
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee;">
+                <th style="text-align: left; padding: 10px 0; color: #888;">Name</th>
+                <th style="text-align: left; padding: 10px 0; color: #888;">Client</th>
+                <th style="text-align: left; padding: 10px 0; color: #888;">Uploaded</th>
+                <th style="text-align: left; padding: 10px 0; color: #888;">File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 12px 0; font-weight: 500;">{{ doc.name }}</td>
+                <td style="padding: 12px 0; color: #555;">{{ doc.client.name|default:"—" }}</td>
+                <td style="padding: 12px 0; color: #555;">{{ doc.uploaded_at|date:"M d, Y" }}</td>
+                <td style="padding: 12px 0;"><a href="{{ doc.file_url }}" target="_blank" style="color: #1a1a1a;">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #888;">No documents yet. Upload your first one!</p>
+    {% endif %}
+</div>
+{% endblock %}

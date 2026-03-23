@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %} {% block title %}Upload Document{% endblock %} {% block content %}
+<div class="container" style="max-width: 520px;">
+    <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 32px;">Upload Document</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Document name (optional)" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 12px;">
+        <select name="client" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 12px;">
+            <option value="">— No client —</option>
+            {% for client in clients %}
+            <option value="{{ client.id }}">{{ client.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="file" name="file" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 12px;">
+        <button type="submit" style="width: 100%; padding: 12px; background: #1a1a1a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">Upload</button>
+    </form>
+</div>
+{% endblock %}
